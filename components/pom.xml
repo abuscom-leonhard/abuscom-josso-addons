@@ -59,7 +59,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        
+
         <module>josso-default-secdomainselector</module>
         <module>josso-default-secdomainregistry</module>
         <module>josso-appctx-secdomainmatcher</module>
@@ -111,6 +111,7 @@
         <module>josso-email-passworddistributor</module>
         <module>josso-simple-lostpasswordprocess</module>
 
+        <module>josso-multipleldap-identitystore</module>
 
     </modules>
 
