@@ -134,7 +134,7 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
             try {
                 return credentialStore.loadUser(key);
             } catch (Exception e) {
-                logger.info("Could not load user in store", e);
+                logger.info("Could not load user in store");
             }
         }
         throw new SSOIdentityException("could not load user in any store");
@@ -145,7 +145,7 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
             try {
                 return credentialStore.findRolesByUserKey(key);
             } catch (Exception e) {
-                logger.info("Could not load roles in store", e);
+                logger.info("Could not load roles in store");
             }
         }
         throw new SSOIdentityException("could not load roles in any store");
@@ -156,7 +156,7 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
             try {
                 return credentialStore.loadCredentials(key, cp);
             } catch (Exception e) {
-                logger.info("Could not load credential in store", e);
+                logger.info("Could not load credential in store");
             }
         }
         throw new SSOIdentityException("could not load credential in any store");
@@ -167,7 +167,7 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
             try {
                 return credentialStore.loadUID(key, cp);
             } catch (Exception e) {
-                logger.info("Could not load uid in store", e);
+                logger.info("Could not load uid in store");
             }
         }
         throw new SSOIdentityException("could not load uid in any store");
@@ -179,7 +179,7 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
                 boolean result = credentialStore.bind(username, password);
                 if (result) return true;
             } catch (Exception e) {
-                logger.info("Could not bind user in store", e);
+                logger.info("Could not bind user in store");
             }
         }
         throw new SSOAuthenticationException("could not authenticate user in any store");
