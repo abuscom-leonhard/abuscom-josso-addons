@@ -6,6 +6,7 @@ package org.josso.event.logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
@@ -41,6 +42,7 @@ public class LoginEventLogger implements SSOEventListener {
         }
 
         if (event.getType().equals("authenticationSuccess")) {
+            Connection c = null;
             try {
                 SSOIdentityEvent identityEvent = (SSOIdentityEvent) event;
 
@@ -49,12 +51,18 @@ public class LoginEventLogger implements SSOEventListener {
                 }
 
 
-                Connection c = getDBConnection();
+                c = getDBConnection();
                 LoginEventDAO loginEventDAO = new LoginEventDAO(c, _loginEventDML);
                 loginEventDAO.logLoginEvent(identityEvent.getUsername(), identityEvent.getSessionId(), identityEvent.getRemoteHost());
                 System.out.println("-- event erkannt ");
             } catch (SSOEventException ex) {
                 logger.error("Error during catch of login event ", ex);
+            } finally {
+                try {
+                    close(c);
+                } catch (SSOEventException ex) {
+                    logger.error(null, ex);
+                }
             }
         }
     }
@@ -93,7 +101,7 @@ public class LoginEventLogger implements SSOEventListener {
         return _datasource;
     }
 
-    protected Connection getDBConnection() throws SSOEventException {
+    private Connection getDBConnection() throws SSOEventException {
         try {
             return getDataSource().getConnection();
         } catch (SQLException e) {
@@ -101,5 +109,27 @@ public class LoginEventLogger implements SSOEventListener {
             throw new SSOEventException(
                     "Exception while getting connection: \n " + e.getMessage());
         }
+    }
+
+    private void close(Connection dbConnection) throws SSOEventException {
+        try {
+            if (dbConnection != null
+                    && !dbConnection.isClosed()) {
+                dbConnection.close();
+            }
+        } catch (SQLException se) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Error while clossing connection");
+            }
+
+            throw new SSOEventException("Error while clossing connection\n" + se.getMessage());
+        } catch (Exception e) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Error while clossing connection");
+            }
+
+            throw new SSOEventException("Error while clossing connection\n" + e.getMessage());
+        }
+
     }
 }
