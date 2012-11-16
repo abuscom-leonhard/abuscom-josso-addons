@@ -132,7 +132,9 @@ public class MultipleLDAPBindIdentityStore extends AbstractStore implements Bind
     public BaseUser loadUser(UserKey key) throws NoSuchUserException, SSOIdentityException {
         for (LDAPBindIdentityStore credentialStore : credentialStores) {
             try {
-                return credentialStore.loadUser(key);
+                BaseUser baseUser = credentialStore.loadUser(key);
+                baseUser.setName(baseUser.getName().toLowerCase());
+                return baseUser;
             } catch (Exception e) {
                 logger.info("Could not load user in store");
             }
